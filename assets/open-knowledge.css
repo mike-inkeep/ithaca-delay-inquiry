@@ -165,6 +165,35 @@ body {
   color: var(--ok-muted);
 }
 .ok-footer a { color: var(--ok-muted); }
+.ok-view-switch {
+  display: flex;
+  margin: 0 0.5rem 1rem;
+  border: 1px solid var(--ok-border);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+}
+.ok-view-switch a, .ok-view-switch .ok-view-on {
+  flex: 1;
+  text-align: center;
+  padding: 0.3rem 0.4rem;
+  text-decoration: none;
+  color: var(--ok-muted);
+}
+.ok-view-switch a:hover { background: var(--ok-accent-soft); color: var(--ok-fg); }
+.ok-view-switch .ok-view-on { background: var(--ok-accent-soft); color: var(--ok-accent); font-weight: 650; }
+.ok-content .ok-doc-section { border-top: 3px double var(--ok-border); margin-top: 3rem; padding-top: 1.75rem; }
+.ok-content .ok-doc-section:first-of-type { border-top: 0; margin-top: 0; padding-top: 0; }
+.ok-section-eyebrow {
+  font-family: var(--ok-font-ui);
+  font-size: 0.7rem;
+  font-weight: 650;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--ok-muted);
+  margin: 0 0 0.25rem;
+}
 @media (max-width: 48rem) {
   .ok-layout { flex-direction: column; }
   .ok-sidebar { position: static; height: auto; width: 100%; flex-basis: auto; border-right: 0; border-bottom: 1px solid var(--ok-border); }
