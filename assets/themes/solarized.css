@@ -24,3 +24,30 @@
   --ok-selection: #268bd24d;
   }
 }
+
+:root[data-ok-scheme="dark"] {
+  --ok-bg: #002b36;
+  --ok-fg: #93a1a1;
+  --ok-muted: #6a7f86;
+  --ok-border: #0e4a56;
+  --ok-sidebar-bg: #00252e;
+  --ok-accent: #268bd2;
+  --ok-accent-soft: #268bd21f;
+  --ok-broken: #dc322f;
+  --ok-code-bg: #073642;
+  --ok-selection: #268bd24d;
+  color-scheme: dark;
+}
+:root[data-ok-scheme="light"] {
+  --ok-bg: #002b36;
+  --ok-fg: #93a1a1;
+  --ok-muted: #6a7f86;
+  --ok-border: #0e4a56;
+  --ok-sidebar-bg: #00252e;
+  --ok-accent: #268bd2;
+  --ok-accent-soft: #268bd21f;
+  --ok-broken: #dc322f;
+  --ok-code-bg: #073642;
+  --ok-selection: #268bd24d;
+  color-scheme: light;
+}

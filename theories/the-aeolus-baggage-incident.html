@@ -7,6 +7,17 @@
   <title>The Aeolus Baggage Incident</title>
   <link rel="stylesheet" href="../assets/open-knowledge.css" />
   <link rel="stylesheet" href="../assets/themes/book.css" />
+  <script>(function () {
+    try {
+      var s = localStorage.getItem('ok-pages-scheme');
+      if (s === 'light' || s === 'dark') document.documentElement.setAttribute('data-ok-scheme', s);
+      var t = localStorage.getItem('ok-pages-theme');
+      if (t && /^[a-z0-9-]+$/.test(t)) {
+        var l = document.querySelector('link[href*="assets/themes/"]');
+        if (l) l.setAttribute('href', l.getAttribute('href').replace(/themes\/[a-z0-9-]+\.css/, 'themes/' + t + '.css'));
+      }
+    } catch (e) { /* private mode */ }
+  })();</script>
 </head>
 <body>
   <div class="ok-layout">
@@ -123,8 +134,12 @@
     </main>
   </div>
   <style>
-    .ok-picker { position: fixed; right: 1rem; bottom: 1rem; z-index: 50; font-family: var(--ok-font-ui); }
-    .ok-picker-toggle, .ok-picker-item {
+    .ok-picker { position: fixed; z-index: 50; font-family: var(--ok-font-ui); }
+    .ok-picker[data-pos="tr"] { top: 1rem; right: 1rem; }
+    .ok-picker[data-pos="tl"] { top: 1rem; left: 1rem; }
+    .ok-picker[data-pos="br"] { bottom: 1rem; right: 1rem; }
+    .ok-picker[data-pos="bl"] { bottom: 1rem; left: 1rem; }
+    .ok-picker-toggle, .ok-picker-item, .ok-picker-seg, .ok-picker-corner, .ok-picker-hide {
       font-family: inherit; font-size: 0.82rem; color: var(--ok-fg);
       background: var(--ok-sidebar-bg); border: 1px solid var(--ok-border);
       border-radius: 0.5rem; cursor: pointer;
@@ -132,12 +147,20 @@
     .ok-picker-toggle { padding: 0.45rem 0.9rem; box-shadow: 0 2px 8px #0003; }
     .ok-picker-toggle:hover { border-color: var(--ok-accent); color: var(--ok-accent); }
     .ok-picker-panel {
-      position: absolute; right: 0; bottom: 2.9rem; width: 13rem;
+      position: absolute; right: 0; width: 13.5rem;
       background: var(--ok-bg); border: 1px solid var(--ok-border);
       border-radius: 0.625rem; padding: 0.5rem; box-shadow: 0 8px 28px #0004;
       display: flex; flex-direction: column; gap: 0.25rem;
     }
+    .ok-picker[data-pos^="t"] .ok-picker-panel { top: 2.9rem; bottom: auto; }
+    .ok-picker[data-pos^="b"] .ok-picker-panel { bottom: 2.9rem; top: auto; }
+    .ok-picker[data-pos$="l"] .ok-picker-panel { left: 0; right: auto; }
     .ok-picker-panel[hidden] { display: none; }
+    .ok-picker-schemes { display: flex; gap: 0.25rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--ok-border); }
+    .ok-picker-seg { flex: 1; padding: 0.3rem 0; text-align: center; font-size: 0.72rem; border-color: transparent; background: none; }
+    .ok-picker-seg:hover { background: var(--ok-accent-soft); }
+    .ok-picker-seg[aria-pressed="true"] { background: var(--ok-accent-soft); color: var(--ok-accent); font-weight: 600; }
+    .ok-picker-list { display: flex; flex-direction: column; gap: 0.15rem; max-height: min(50vh, 22rem); overflow-y: auto; }
     .ok-picker-item {
       display: flex; align-items: center; gap: 0.55rem; width: 100%;
       padding: 0.4rem 0.6rem; border-color: transparent; background: none; text-align: left;
@@ -145,13 +168,31 @@
     .ok-picker-item:hover { background: var(--ok-accent-soft); }
     .ok-picker-item[aria-pressed="true"] { background: var(--ok-accent-soft); color: var(--ok-accent); font-weight: 600; }
     .ok-picker-dot { width: 0.7rem; height: 0.7rem; border-radius: 50%; flex: none; border: 1px solid #0002; }
+    .ok-picker-foot {
+      display: flex; align-items: center; gap: 0.25rem;
+      padding-top: 0.4rem; border-top: 1px solid var(--ok-border);
+    }
+    .ok-picker-corner { width: 1.6rem; height: 1.4rem; padding: 0; border-color: transparent; background: none; position: relative; }
+    .ok-picker-corner::after {
+      content: ''; position: absolute; width: 0.45rem; height: 0.45rem; border-radius: 2px;
+      background: var(--ok-muted);
+    }
+    .ok-picker-corner[data-pos="tl"]::after { top: 0.2rem; left: 0.3rem; }
+    .ok-picker-corner[data-pos="tr"]::after { top: 0.2rem; right: 0.3rem; }
+    .ok-picker-corner[data-pos="bl"]::after { bottom: 0.2rem; left: 0.3rem; }
+    .ok-picker-corner[data-pos="br"]::after { bottom: 0.2rem; right: 0.3rem; }
+    .ok-picker-corner:hover { background: var(--ok-accent-soft); }
+    .ok-picker-corner[aria-pressed="true"] { background: var(--ok-accent-soft); }
+    .ok-picker-corner[aria-pressed="true"]::after { background: var(--ok-accent); }
+    .ok-picker-hide { margin-left: auto; padding: 0.3rem 0.6rem; font-size: 0.72rem; border-color: transparent; background: none; color: var(--ok-muted); }
+    .ok-picker-hide:hover { background: var(--ok-accent-soft); color: var(--ok-fg); }
     .ok-picker-hint {
-      margin: 0.25rem 0 0; padding: 0.4rem 0.6rem 0.15rem; border-top: 1px solid var(--ok-border);
+      margin: 0; padding: 0.4rem 0.6rem 0.15rem;
       font-size: 0.68rem; color: var(--ok-muted); overflow-wrap: anywhere;
     }
     .ok-picker-hint code { font-family: var(--ok-font-mono); font-size: 0.95em; }
   </style>
-  <div class="ok-picker">
+  <div class="ok-picker" data-pos="tr">
     <div class="ok-picker-panel" id="ok-picker-panel" hidden></div>
     <button type="button" class="ok-picker-toggle" aria-expanded="false" aria-controls="ok-picker-panel">Theme</button>
   </div>
@@ -159,12 +200,44 @@
     const THEMES = [{"name":"book","label":"Book","swatch":"#1e5f8a"},{"name":"wine","label":"Wine","swatch":"#8a3033"},{"name":"docs","label":"Docs","swatch":"#0969da"},{"name":"forest","label":"Forest","swatch":"#3a6b35"},{"name":"midnight","label":"Midnight","swatch":"#4c5fd5"},{"name":"catppuccin","label":"Catppuccin","swatch":"#8839ef"},{"name":"dracula","label":"Dracula","swatch":"#bd93f9"},{"name":"monokai","label":"Monokai","swatch":"#66d9ef"},{"name":"gruvbox","label":"Gruvbox","swatch":"#83a598"},{"name":"solarized","label":"Solarized","swatch":"#268bd2"}];
     const links = Array.from(document.querySelectorAll('link[rel="stylesheet"]'));
     const themeLink = links.find((l) => /assets\/themes\/[a-z0-9-]+\.css$/.test(l.getAttribute('href') ?? ''));
-    if (themeLink) {
+    const widget = document.querySelector('.ok-picker');
+    if (themeLink && widget) {
+      try { if (sessionStorage.getItem('ok-pages-picker-hidden') === '1') widget.hidden = true; } catch { /* private mode */ }
       const href = themeLink.getAttribute('href') ?? '';
       const prefix = href.slice(0, href.indexOf('assets/'));
       const nameOf = (h) => (h.match(/themes\/([a-z0-9-]+)\.css$/) ?? [])[1] ?? 'book';
       const panel = document.getElementById('ok-picker-panel');
-      const toggle = document.querySelector('.ok-picker-toggle');
+      const toggle = widget.querySelector('.ok-picker-toggle');
+      const store = (key, value) => {
+        try { value === null ? localStorage.removeItem(key) : localStorage.setItem(key, value); } catch { /* private mode */ }
+      };
+
+      const schemes = document.createElement('div');
+      schemes.className = 'ok-picker-schemes';
+      schemes.setAttribute('role', 'group');
+      schemes.setAttribute('aria-label', 'Color scheme');
+      const applyScheme = (value) => {
+        if (value) document.documentElement.setAttribute('data-ok-scheme', value);
+        else document.documentElement.removeAttribute('data-ok-scheme');
+        store('ok-pages-scheme', value || null);
+        for (const b of schemes.children) b.setAttribute('aria-pressed', String((b.dataset.scheme || '') === (value || '')));
+        window.__okMermaidRerender?.();
+      };
+      for (const [value, label] of [['light', 'Light'], ['dark', 'Dark'], ['', 'Auto']]) {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'ok-picker-seg';
+        b.dataset.scheme = value;
+        const current = document.documentElement.getAttribute('data-ok-scheme') ?? '';
+        b.setAttribute('aria-pressed', String(current === value));
+        b.textContent = label;
+        b.addEventListener('click', () => applyScheme(value));
+        schemes.append(b);
+      }
+      panel.append(schemes);
+
+      const list = document.createElement('div');
+      list.className = 'ok-picker-list';
       const hint = document.createElement('p');
       hint.className = 'ok-picker-hint';
       const setHint = (name) => {
@@ -173,8 +246,8 @@
       const apply = (name) => {
         themeLink.addEventListener('load', () => window.__okMermaidRerender?.(), { once: true });
         themeLink.setAttribute('href', prefix + 'assets/themes/' + name + '.css');
-        try { localStorage.setItem('ok-pages-theme', name); } catch { /* private mode */ }
-        for (const b of panel.querySelectorAll('.ok-picker-item')) {
+        store('ok-pages-theme', name);
+        for (const b of list.querySelectorAll('.ok-picker-item')) {
           b.setAttribute('aria-pressed', String(b.dataset.theme === name));
         }
         setHint(name);
@@ -184,16 +257,50 @@
         b.type = 'button';
         b.className = 'ok-picker-item';
         b.dataset.theme = t.name;
-        b.setAttribute('aria-pressed', String(t.name === nameOf(href)));
+        b.setAttribute('aria-pressed', String(t.name === nameOf(themeLink.getAttribute('href') ?? '')));
         const dot = document.createElement('span');
         dot.className = 'ok-picker-dot';
         dot.style.background = t.swatch;
         b.append(dot, document.createTextNode(t.label));
         b.addEventListener('click', () => apply(t.name));
-        panel.append(b);
+        list.append(b);
       }
+      panel.append(list);
+
+      const foot = document.createElement('div');
+      foot.className = 'ok-picker-foot';
+      const posNames = { tl: 'top left', tr: 'top right', bl: 'bottom left', br: 'bottom right' };
+      const applyPos = (pos) => {
+        widget.dataset.pos = pos;
+        store('ok-pages-picker-pos', pos);
+        for (const b of foot.querySelectorAll('.ok-picker-corner')) {
+          b.setAttribute('aria-pressed', String(b.dataset.pos === pos));
+        }
+      };
+      for (const pos of ['tl', 'tr', 'bl', 'br']) {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'ok-picker-corner';
+        b.dataset.pos = pos;
+        b.setAttribute('aria-label', 'Move picker to ' + posNames[pos]);
+        b.setAttribute('aria-pressed', String(pos === widget.dataset.pos));
+        b.addEventListener('click', () => applyPos(pos));
+        foot.append(b);
+      }
+      const hide = document.createElement('button');
+      hide.type = 'button';
+      hide.className = 'ok-picker-hide';
+      hide.textContent = 'Hide';
+      hide.title = 'Hide the picker for this tab session';
+      hide.addEventListener('click', () => {
+        widget.hidden = true;
+        try { sessionStorage.setItem('ok-pages-picker-hidden', '1'); } catch { /* private mode */ }
+      });
+      foot.append(hide);
+      panel.append(foot);
       panel.append(hint);
-      setHint(nameOf(href));
+      setHint(nameOf(themeLink.getAttribute('href') ?? ''));
+
       toggle.addEventListener('click', () => {
         const open = panel.hidden;
         panel.hidden = !open;
@@ -206,8 +313,10 @@
         if (!panel.hidden && !e.target.closest('.ok-picker')) { panel.hidden = true; toggle.setAttribute('aria-expanded', 'false'); }
       });
       try {
-        const stored = localStorage.getItem('ok-pages-theme');
-        if (stored && stored !== nameOf(href) && THEMES.some((t) => t.name === stored)) apply(stored);
+        const storedTheme = localStorage.getItem('ok-pages-theme');
+        if (storedTheme && storedTheme !== nameOf(themeLink.getAttribute('href') ?? '') && THEMES.some((t) => t.name === storedTheme)) apply(storedTheme);
+        const storedPos = localStorage.getItem('ok-pages-picker-pos');
+        if (storedPos && storedPos in posNames) applyPos(storedPos);
       } catch { /* private mode */ }
     }
   </script>

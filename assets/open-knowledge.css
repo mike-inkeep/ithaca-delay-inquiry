@@ -170,3 +170,36 @@ body {
   .ok-sidebar { position: static; height: auto; width: 100%; flex-basis: auto; border-right: 0; border-bottom: 1px solid var(--ok-border); }
   .ok-content { padding: 1.5rem 1.25rem 4rem; }
 }
+
+:root[data-ok-scheme="dark"] {
+  --ok-bg: #10151b;
+    --ok-fg: #dfe5ea;
+    --ok-muted: #93a1ad;
+    --ok-border: #2a333d;
+    --ok-sidebar-bg: #0b0f14;
+    --ok-accent: #5aa3d8;
+    --ok-accent-soft: #5aa3d824;
+    --ok-broken: #d98a8c;
+    --ok-code-bg: #171e26;
+    --ok-selection: #5aa3d833;
+  color-scheme: dark;
+}
+:root[data-ok-scheme="light"] {
+  color-scheme: light dark;
+  --ok-bg: #fbfaf7;
+  --ok-fg: #24282c;
+  --ok-muted: #5f6b76;
+  --ok-border: #ded9cd;
+  --ok-sidebar-bg: #f4f1e9;
+  --ok-accent: #1e5f8a;
+  --ok-accent-soft: #1e5f8a1a;
+  --ok-broken: #8a3033;
+  --ok-code-bg: #f1eee6;
+  --ok-selection: #1e5f8a33;
+  --ok-content-width: 46rem;
+  --ok-sidebar-width: 17rem;
+  --ok-font-body: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+  --ok-font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+  --ok-font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  color-scheme: light;
+}
