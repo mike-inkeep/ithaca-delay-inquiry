@@ -159,6 +159,20 @@
       font-size: 0.68rem; color: var(--ok-muted); overflow-wrap: anywhere;
     }
     .ok-picker-hint code { font-family: var(--ok-font-mono); font-size: 0.95em; }
+    .ok-picker-toast {
+      position: fixed; z-index: 50; max-width: 17rem;
+      background: var(--ok-bg); color: var(--ok-muted); border: 1px solid var(--ok-border);
+      border-radius: 0.5rem; padding: 0.5rem 0.8rem;
+      font-family: var(--ok-font-ui); font-size: 0.75rem; box-shadow: 0 4px 16px #0003;
+    }
+    .ok-picker-toast kbd {
+      font-family: var(--ok-font-mono); font-size: 0.9em; color: var(--ok-fg);
+      border: 1px solid var(--ok-border); border-radius: 3px; padding: 0 0.25em;
+    }
+    .ok-picker-toast[data-pos="tr"] { top: 1rem; right: 1rem; }
+    .ok-picker-toast[data-pos="tl"] { top: 1rem; left: 1rem; }
+    .ok-picker-toast[data-pos="br"] { bottom: 1rem; right: 1rem; }
+    .ok-picker-toast[data-pos="bl"] { bottom: 1rem; left: 1rem; }
   </style>
   <div class="ok-picker" data-pos="tr">
     <div class="ok-picker-panel" id="ok-picker-panel" hidden></div>
@@ -259,12 +273,36 @@
       hide.type = 'button';
       hide.className = 'ok-picker-hide';
       hide.textContent = 'Hide';
-      hide.title = 'Hide the picker for this tab session';
+      hide.title = 'Hide the picker for this tab session (press T to bring it back)';
+      const unhide = () => {
+        widget.hidden = false;
+        try { sessionStorage.removeItem('ok-pages-picker-hidden'); } catch { /* private mode */ }
+      };
       hide.addEventListener('click', () => {
         widget.hidden = true;
+        panel.hidden = true;
+        toggle.setAttribute('aria-expanded', 'false');
         try { sessionStorage.setItem('ok-pages-picker-hidden', '1'); } catch { /* private mode */ }
+        const toast = document.createElement('div');
+        toast.className = 'ok-picker-toast';
+        toast.dataset.pos = widget.dataset.pos;
+        toast.setAttribute('role', 'status');
+        toast.innerHTML = 'Theme picker hidden for this tab — press <kbd>T</kbd> to bring it back.';
+        document.body.append(toast);
+        setTimeout(() => toast.remove(), 6000);
       });
       foot.append(hide);
+      document.addEventListener('keydown', (e) => {
+        if (!widget.hidden || e.key.toLowerCase() !== 't') return;
+        if (e.metaKey || e.ctrlKey || e.altKey) return;
+        if (e.target instanceof Element && e.target.closest('input, textarea, select, [contenteditable]')) return;
+        unhide();
+      });
+      // A shareable recovery path that needs no keyboard: open any page with
+      // #themes in the URL and the picker comes back.
+      const unhideFromHash = () => { if (location.hash === '#themes') unhide(); };
+      window.addEventListener('hashchange', unhideFromHash);
+      unhideFromHash();
       panel.append(foot);
       panel.append(hint);
       setHint(nameOf(themeLink.getAttribute('href') ?? ''));
