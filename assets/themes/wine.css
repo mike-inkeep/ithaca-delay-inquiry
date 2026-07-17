@@ -1,0 +1,22 @@
+:root {
+  --ok-bg: #faf7f2;
+  --ok-sidebar-bg: #f3ede3;
+  --ok-border: #ddd2c2;
+  --ok-accent: #8a3033;
+  --ok-accent-soft: #8a30331a;
+  --ok-broken: #1e5f8a;
+  --ok-code-bg: #f0eade;
+  --ok-selection: #8a303333;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ok-bg: #151013;
+    --ok-sidebar-bg: #0f0b0d;
+    --ok-border: #3a2c31;
+    --ok-accent: #d98a8c;
+    --ok-accent-soft: #d98a8c24;
+    --ok-broken: #5aa3d8;
+    --ok-code-bg: #1d1518;
+    --ok-selection: #d98a8c33;
+  }
+}
