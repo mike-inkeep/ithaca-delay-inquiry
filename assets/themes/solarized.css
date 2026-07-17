@@ -1,0 +1,26 @@
+:root {
+  --ok-bg: #002b36;
+  --ok-fg: #93a1a1;
+  --ok-muted: #6a7f86;
+  --ok-border: #0e4a56;
+  --ok-sidebar-bg: #00252e;
+  --ok-accent: #268bd2;
+  --ok-accent-soft: #268bd21f;
+  --ok-broken: #dc322f;
+  --ok-code-bg: #073642;
+  --ok-selection: #268bd24d;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+  --ok-bg: #002b36;
+  --ok-fg: #93a1a1;
+  --ok-muted: #6a7f86;
+  --ok-border: #0e4a56;
+  --ok-sidebar-bg: #00252e;
+  --ok-accent: #268bd2;
+  --ok-accent-soft: #268bd21f;
+  --ok-broken: #dc322f;
+  --ok-code-bg: #073642;
+  --ok-selection: #268bd24d;
+  }
+}

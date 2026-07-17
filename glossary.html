@@ -79,7 +79,7 @@
     <button type="button" class="ok-picker-toggle" aria-expanded="false" aria-controls="ok-picker-panel">Theme</button>
   </div>
   <script type="module">
-    const THEMES = [{"name":"book","label":"Book","swatch":"#1e5f8a"},{"name":"wine","label":"Wine","swatch":"#8a3033"},{"name":"docs","label":"Docs","swatch":"#0969da"},{"name":"forest","label":"Forest","swatch":"#3a6b35"},{"name":"midnight","label":"Midnight","swatch":"#4c5fd5"}];
+    const THEMES = [{"name":"book","label":"Book","swatch":"#1e5f8a"},{"name":"wine","label":"Wine","swatch":"#8a3033"},{"name":"docs","label":"Docs","swatch":"#0969da"},{"name":"forest","label":"Forest","swatch":"#3a6b35"},{"name":"midnight","label":"Midnight","swatch":"#4c5fd5"},{"name":"catppuccin","label":"Catppuccin","swatch":"#8839ef"},{"name":"dracula","label":"Dracula","swatch":"#bd93f9"},{"name":"monokai","label":"Monokai","swatch":"#66d9ef"},{"name":"gruvbox","label":"Gruvbox","swatch":"#83a598"},{"name":"solarized","label":"Solarized","swatch":"#268bd2"}];
     const links = Array.from(document.querySelectorAll('link[rel="stylesheet"]'));
     const themeLink = links.find((l) => /assets\/themes\/[a-z0-9-]+\.css$/.test(l.getAttribute('href') ?? ''));
     if (themeLink) {
