@@ -204,7 +204,7 @@ body {
   color: var(--ok-muted);
   margin: 0 0 1.25rem;
 }
-.ok-single .ok-masthead-title {
+.ok-content .ok-masthead-title {
   font-size: clamp(2.2rem, 6vw, 3.4rem);
   line-height: 1.1;
   margin: 0 0 1rem;
